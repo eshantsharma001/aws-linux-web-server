@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project 1 — AWS Linux Web Server | Eshant Sharma</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --surface: #ffffff;
+      --surface-subtle: #f1f3f6;
+      --ink: #111827;
+      --muted: #525d6e;
+      --line: #e2e6ec;
+      --accent: #d95d1a;
+      --accent-soft: #fff3ec;
+      --ok: #0f9d58;
+      --ok-soft: #e8f6ef;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      padding: 2.5rem 1.25rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 2.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .eyebrow {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--ok);
+      background: var(--ok-soft);
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+    }
+
+    .badge::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--ok);
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 750;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 0.85rem;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 1.02rem;
+      max-width: 64ch;
+    }
+
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 2rem 2.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      margin-bottom: 1.15rem;
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 1rem 1.15rem;
+      background: var(--surface-subtle);
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .flow span.node {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 0.35rem 0.7rem;
+      border-radius: 8px;
+    }
+
+    .flow span.arrow {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .pillar {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.15rem 1.25rem;
+      background: var(--surface);
+    }
+
+    .pillar-num {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 0.15rem 0.55rem;
+      border-radius: 6px;
+      margin-bottom: 0.55rem;
+    }
+
+    .pillar h3 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .pillar p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    footer {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1.35rem 2.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    footer strong {
+      color: var(--ink);
+      font-weight: 650;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 1.25rem 0.9rem;
+      }
+
+      header,
+      .section,
+      footer {
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      .pillars {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="top-bar">
+        <span class="eyebrow">Project 1 • Cloud Infrastructure</span>
+        <span class="badge">Live on EC2</span>
+      </div>
+      <h1>AWS Linux Web Server</h1>
+      <p class="lead">
+        A hands-on cloud administration project showing how a virtual Linux server inside a VPC
+        serves a live site through Nginx over Port 80, paired with dedicated EBS storage, S3
+        backups, IAM roles, and CloudWatch monitoring.
+      </p>
+    </header>
+
+    <section class="section" aria-label="Traffic and deployment flow">
+      <h2>How Traffic & Deployment Flow</h2>
+      <div class="flow">
+        <span class="node">Code / Site Files</span>
+        <span class="arrow">→</span>
+        <span class="node">Ubuntu EC2 (/var/www/html)</span>
+        <span class="arrow">→</span>
+        <span class="node">Nginx (Port 80)</span>
+        <span class="arrow">→</span>
+        <span class="node">Browser via Public IP</span>
+      </div>
+    </section>
+
+    <section class="section" aria-label="Core components">
+      <h2>What This Project Covers</h2>
+      <div class="pillars">
+        <article class="pillar">
+          <span class="pillar-num">01</span>
+          <h3>EC2 + Ubuntu Linux + VPC</h3>
+          <p>
+            Runs an Ubuntu virtual server inside a private AWS Virtual Private Cloud with
+            controlled network access and a public IP for reachability.
+          </p>
+        </article>
+
+        <article class="pillar">
+          <span class="pillar-num">02</span>
+          <h3>Nginx Web Server</h3>
+          <p>
+            Listens on Port 80 and serves files directly from <code>/var/www/html</code> to
+            visitors opening the server address in a browser.
+          </p>
+        </article>
+
+        <article class="pillar">
+          <span class="pillar-num">03</span>
+          <h3>EBS Volume + S3 Backups</h3>
+          <p>
+            Attaches, formats, and mounts a persistent EBS volume for extra disk space while
+            syncing backups safely into an Amazon S3 bucket.
+          </p>
+        </article>
+
+        <article class="pillar">
+          <span class="pillar-num">04</span>
+          <h3>IAM Roles + CloudWatch</h3>
+          <p>
+            Grants the EC2 instance an IAM role for S3 access without storing static keys, and
+            tracks health metrics like CPU utilization in CloudWatch.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      <span>Deployed on AWS EC2 (Ubuntu + Nginx) by <strong>Eshant Sharma</strong></span>
+      <span>Port 80 • /var/www/html</span>
+    </footer>
+  </div>
+</body>
+</html>
